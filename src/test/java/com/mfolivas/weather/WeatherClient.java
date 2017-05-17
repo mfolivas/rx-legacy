@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
+import rx.Observable;
+
 public class WeatherClient {
 
 	private static final Logger log = LoggerFactory.getLogger(WeatherClient.class);
@@ -17,6 +19,10 @@ public class WeatherClient {
 		//HTTP, HTTP, HTTP
 		log.info("Done: {}", city);
 		return new Weather();
+	}
+
+	public Observable<Weather> rxFetch(String city) {
+		return Observable.fromCallable(() -> fetch(city));
 	}
 
 }
