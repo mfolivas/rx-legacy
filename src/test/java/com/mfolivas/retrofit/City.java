@@ -1,4 +1,4 @@
-package com.nurkiewicz.retrofit;
+package com.mfolivas.retrofit;
 
 public class City {
 	private String city;

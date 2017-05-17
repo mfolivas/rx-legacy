@@ -1,6 +1,6 @@
-package com.nurkiewicz.weather;
+package com.mfolivas.weather;
 
-import com.nurkiewicz.util.Sleeper;
+import com.mfolivas.util.Sleeper;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

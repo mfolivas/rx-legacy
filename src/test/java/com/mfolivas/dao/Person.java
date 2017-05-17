@@ -1,4 +1,4 @@
-package com.nurkiewicz.dao;
+package com.mfolivas.dao;
 
 public class Person {
 

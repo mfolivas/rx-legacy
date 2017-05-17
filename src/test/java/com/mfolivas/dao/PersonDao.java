@@ -1,6 +1,6 @@
-package com.nurkiewicz.dao;
+package com.mfolivas.dao;
 
-import com.nurkiewicz.util.Sleeper;
+import com.mfolivas.util.Sleeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

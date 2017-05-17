@@ -1,4 +1,4 @@
-package com.nurkiewicz.retrofit;
+package com.mfolivas.retrofit;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;

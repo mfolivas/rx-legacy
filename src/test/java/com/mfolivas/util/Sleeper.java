@@ -1,4 +1,4 @@
-package com.nurkiewicz.util;
+package com.mfolivas.util;
 
 import com.google.common.base.Throwables;
 

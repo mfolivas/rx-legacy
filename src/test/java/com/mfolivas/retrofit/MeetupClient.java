@@ -1,4 +1,4 @@
-package com.nurkiewicz.retrofit;
+package com.mfolivas.retrofit;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
