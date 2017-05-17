@@ -1,4 +1,4 @@
-package com.nurkiewicz.retrofit;
+package com.mfolivas.retrofit;
 
 import java.util.List;
 

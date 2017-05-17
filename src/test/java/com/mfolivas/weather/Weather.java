@@ -1,4 +1,4 @@
-package com.nurkiewicz.weather;
+package com.mfolivas.weather;
 
 public class Weather {
 
