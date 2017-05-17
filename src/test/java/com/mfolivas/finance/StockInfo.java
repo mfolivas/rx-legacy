@@ -12,6 +12,14 @@ public class StockInfo {
         this.price = price;
     }
 
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
     @Override
     public String toString() {
         return symbol + ":" + price;
