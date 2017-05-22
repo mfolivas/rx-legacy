@@ -4,12 +4,12 @@ package com.mfolivas.finance;
  * Fetch information about stocks.
  */
 
-import com.mfolivas.util.Sleeper;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Duration;
+import java.util.List;
 import java.util.Random;
+
+import io.reactivex.Observable;
 
 
 public class StockTradingService {
@@ -20,7 +20,16 @@ public class StockTradingService {
         double randomValue = minRange + (maxRange - minRange) * random.nextDouble();
         BigDecimal price = BigDecimal.valueOf(randomValue).setScale(2, RoundingMode.HALF_EVEN);
         double amount = price.doubleValue();
-//        Sleeper.sleep(Duration.ofMillis(price.longValue()));
         return amount;
+    }
+
+
+    public static Observable<StockInfo> getStockPrices(List<String> tickerSymbols) {
+        System.out.println("here: " + tickerSymbols);
+        return Observable.create(subscriber -> {
+            tickerSymbols.stream()
+                    .forEach(symbol -> subscriber.onNext(new StockInfo(symbol, StockTradingService.getPrice(symbol))));
+            subscriber.onComplete();
+        });
     }
 }

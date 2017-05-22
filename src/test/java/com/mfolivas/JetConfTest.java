@@ -1,6 +1,7 @@
 package com.mfolivas;
 
 import com.mfolivas.cache.CacheServer;
+import com.mfolivas.finance.StockTradingService;
 import com.mfolivas.util.Sleeper;
 import com.mfolivas.weather.Weather;
 import com.mfolivas.weather.WeatherClient;
@@ -23,7 +24,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 /**
@@ -46,6 +46,7 @@ public class JetConfTest {
 
     @Test
     public void sample_25() throws Exception {
+        //CompletableFutures but with multiple values
         final Observable<Integer> numbers =
                 Observable.just(1, 2, 3);
 
@@ -66,8 +67,6 @@ public class JetConfTest {
     @Test
     public void jet_50() throws Exception {
         final Observable<Weather> minsk = weatherClient.rxFetch("Minsk");
-
-//		minsk.subscribe(weather -> System.out.println(weather));
         minsk.subscribe(this::print);
     }
 
@@ -91,11 +90,7 @@ public class JetConfTest {
 
 
         allResults
-//				.map(...)
-//				.filter()
                 .first()
-//				.map(...)
-//				.filter()
                 .observeOn(Schedulers.computation())
                 .subscribe(this::print);
 
@@ -104,6 +99,8 @@ public class JetConfTest {
 
     @Test
     public void jet_94() throws Exception {
+        //The reason we need to add the "toBlocking()" is because
+        //the application is executing in a different thread.
         Observable
                 .interval(1, TimeUnit.SECONDS)
                 .take(5)
@@ -126,7 +123,7 @@ public class JetConfTest {
                 .map(File::getName);
     }
 
-    final File parent = new File("/home/tomek/tmp/jetconf");
+    final File parent = new File("/Users/Marcelo/development/personal/rx-legacy");
 
     @Test
     public void jet_118() throws Exception {
@@ -180,24 +177,35 @@ public class JetConfTest {
     //sleep()
     @Test
     public void jet_177() throws Exception {
-        final TestScheduler test = Schedulers.test();
-        verySlowSoapService()
-                .timeout(1, TimeUnit.SECONDS, test)
-                .retry(4)
-                .doOnError(ex -> log.error("Error", ex))
-                .onErrorReturn(ex -> BigDecimal.ZERO)
-                .subscribe(new TestSubscriber<>());
+        Observable<Long> soap = verySlowSoapService();
 
-        test.advanceTimeBy(4_999, TimeUnit.MILLISECONDS);
-        //assertions - no result yet
-        test.advanceTimeBy(1, TimeUnit.MILLISECONDS);
-        //we got the exception
+        TestScheduler testSched = Schedulers.test();
+        TestSubscriber<Long> testSub = new TestSubscriber<>();
+        soap
+                .timeout(2, TimeUnit.SECONDS, testSched)
+                .doOnError(ex -> log.warn("Opps " + ex))
+                .retry(4)
+                .onErrorReturn(ex -> -1L)
+                .subscribe(testSub);
+
+        testSub.assertNoValues();
+        testSub.assertNoErrors();
+
+        testSched.advanceTimeBy(9999, TimeUnit.MILLISECONDS);
+
+        testSub.assertNoValues();
+        testSub.assertNoErrors();
+
+        testSched.advanceTimeBy(1, TimeUnit.MILLISECONDS);
+
+        testSub.assertNoErrors();
+        testSub.assertValue(-1L);
 
     }
 
-    Observable<BigDecimal> verySlowSoapService() {
+    Observable<Long> verySlowSoapService() {
         return Observable
-                .just(BigDecimal.TEN)
+                .just(Long.valueOf(10))
                 .delay(1, TimeUnit.MINUTES);
     }
 
