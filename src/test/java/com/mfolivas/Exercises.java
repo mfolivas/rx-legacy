@@ -3,14 +3,17 @@ package com.mfolivas;
 import com.mfolivas.finance.StockInfo;
 import com.mfolivas.finance.StockTradingService;
 import com.mfolivas.finance.FreeStockTradingService;
+import com.mfolivas.util.Sleeper;
+import com.mfolivas.weather.Weather;
 
 import org.junit.Test;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.ObservableEmitter;
 import rx.Observable;
 
 
@@ -84,6 +87,39 @@ public class Exercises {
     }
 
 
+    @Test
+    public void shouldReturnZip() {
+        Observable<Integer> obs1 = Observable.just(1, 3, 5, 7, 9);
+        Observable<Integer> obs2 = Observable.just(2, 4, 6);
 
+        Observable<List<Integer>> obs = Observable.zip(obs1, obs2, (value1, value2) -> {
+            List<Integer> list = new ArrayList<>();
+            list.add(value1);
+            list.add(value2);
+
+            return list;
+        });
+
+        obs.subscribe((value) -> {
+            System.out.println("SubscribeValue = " + value);
+        });
+    }
+
+    @Test
+    public void shouldProvideWeatherAndNewHighlights() {
+        Observable<Weather> weather = Observable.fromCallable(() -> new Weather()).delay(1, TimeUnit.SECONDS);
+        Observable<String> news = Observable.fromCallable(() -> "Traffic jam in I-75");
+//        Observable<String> lottoCombo = Observable.fromCallable(() -> "3-1-9-2-8-4");
+
+        Observable<String> newsAndTraffic =
+                Observable.zip(news, weather, (traffic, conditions) ->
+                        "Current conditions " + traffic +
+                                " and now to the weather, it is currently: " + conditions + " in Miami.");
+
+        newsAndTraffic.subscribe(System.out::println);
+
+        Sleeper.sleep(Duration.ofSeconds(1));
+
+    }
 
 }
