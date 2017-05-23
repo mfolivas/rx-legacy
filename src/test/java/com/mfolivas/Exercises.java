@@ -1,6 +1,6 @@
 package com.mfolivas;
 
-import com.mfolivas.finance.StockInfo;
+import com.mfolivas.finance.Stock;
 import com.mfolivas.finance.StockTradingService;
 import com.mfolivas.finance.FreeStockTradingService;
 import com.mfolivas.util.Sleeper;
@@ -26,7 +26,7 @@ public class Exercises {
     public void testShouldGetFinancialInformation() {
         Observable.create(subscriber -> {
            STOCKS.stream()
-                   .forEach(stock -> subscriber.onNext(new StockInfo(stock, StockTradingService.getPrice(stock))));
+                   .forEach(stock -> subscriber.onNext(new Stock(stock, StockTradingService.getPrice(stock))));
         }).subscribe(System.out::println);
     }
 
@@ -34,29 +34,29 @@ public class Exercises {
     public void shouldSkipTheFirstThree() {
         /*Observable.create(subs -> {
             STOCKS.stream()
-                    .forEach(stock -> subs.onNext(new StockInfo(stock, StockTradingService.getPrice(stock))));
+                    .forEach(stock -> subs.onNext(new Stock(stock, StockTradingService.getPrice(stock))));
         })
                 .skip(3)
                 .subscribe(System.out::println);*/
-        StockTradingService.getStockPrices(STOCKS)
-                .skip(3)
-                .subscribe(System.out::println);
+//        StockTradingService.getStockPrices(STOCKS)
+//                .skip(3)
+//                .subscribe(System.out::println);
     }
 
     @Test
     public void shouldSkipWhileThePriceIsGreaterThan30() {
-        Observable.<StockInfo>create(subscriber -> {
+        Observable.<Stock>create(subscriber -> {
            STOCKS.stream()
-                   .forEach(ticker -> subscriber.onNext(new StockInfo(ticker, StockTradingService.getPrice(ticker))));
+                   .forEach(ticker -> subscriber.onNext(new Stock(ticker, StockTradingService.getPrice(ticker))));
         }).skipWhile(stock -> stock.getPrice() > 30)
                 .subscribe(System.out::println);
     }
 
     @Test
     public void shouldSkipWhilePriceIsOver100() {
-        Observable.<StockInfo>create(subs -> {
+        Observable.<Stock>create(subs -> {
             STOCKS.stream()
-                    .forEach(ticker -> subs.onNext(new StockInfo(ticker, StockTradingService.getPrice(ticker))));
+                    .forEach(ticker -> subs.onNext(new Stock(ticker, StockTradingService.getPrice(ticker))));
         })
                 .skipWhile(stock -> stock.getPrice() > 100)
                 .subscribe(System.out::println);
@@ -64,18 +64,18 @@ public class Exercises {
 
     @Test
     public void shouldCaptureExceptionWithUnstableTradingService() {
-        Observable.<StockInfo>create(subscriber -> {
+        Observable.<Stock>create(subscriber -> {
             STOCKS.stream()
-                    .forEach(ticker -> subscriber.onNext(new StockInfo(ticker, FreeStockTradingService.getPrice(ticker))));
+                    .forEach(ticker -> subscriber.onNext(new Stock(ticker, FreeStockTradingService.getPrice(ticker))));
         }).subscribe(System.out::println,
                 System.out::println);
     }
 
     @Test
     public void shouldUseTheFreeStockTradingWhenPossibleButIfThereIsAnErrorUseThePremiumOne() {
-        FreeStockTradingService.getStockPrices(STOCKS)
+        /*FreeStockTradingService.getStockPrices(STOCKS)
                 .onErrorResumeNext(StockTradingService.getStockPrices(STOCKS))
-        .subscribe(System.out::println);
+        .subscribe(System.out::println);*/
     }
 
     @Test

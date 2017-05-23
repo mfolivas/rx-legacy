@@ -83,7 +83,7 @@ public class JetConfTest {
         CacheServer cacheEu = new CacheServer();
         CacheServer cacheUs = new CacheServer();
 
-        final Observable<String> euResult = cacheEu.rxFindBy(42);
+        /*final Observable<String> euResult = cacheEu.rxFindBy(42);
         final Observable<String> usResult = cacheUs.rxFindBy(42);
 
         final Observable<String> allResults = euResult.mergeWith(usResult); //2 strings
@@ -92,7 +92,7 @@ public class JetConfTest {
         allResults
                 .first()
                 .observeOn(Schedulers.computation())
-                .subscribe(this::print);
+                .subscribe(this::print);*/
 
         Sleeper.sleep(Duration.ofSeconds(1));
     }

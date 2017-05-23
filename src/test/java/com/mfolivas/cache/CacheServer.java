@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.reactivex.Scheduler;
-import rx.Observable;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 import java.time.Duration;
 
@@ -23,9 +23,7 @@ public class CacheServer {
 	}
 
 	public Observable<String> rxFindBy(long key) {
-
-		return Observable.fromCallable(() -> findBy(key))
-				.subscribeOn(Schedulers.io());
+		return Observable.fromCallable(() -> findBy(key));
 	}
 
 }
