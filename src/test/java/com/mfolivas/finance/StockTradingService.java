@@ -18,7 +18,7 @@ public class StockTradingService {
         double maxRange = 500;
         Random random = new Random();
         double randomValue = minRange + (maxRange - minRange) * random.nextDouble();
-        BigDecimal price = BigDecimal.valueOf(randomValue).setScale(2, RoundingMode.HALF_EVEN);
+        BigDecimal price = BigDecimal.valueOf(randomValue).setScale(4, RoundingMode.HALF_EVEN);
         double amount = price.doubleValue();
         return amount;
     }
