@@ -34,6 +34,7 @@ import static org.junit.Assert.fail;
 public class MiamiMeetup {
     private static final Logger log = LoggerFactory.getLogger(MiamiMeetup.class);
     public static final List<String> STOCKS = Arrays.asList("GOOG", "AMZN", "MSFT", "ORCL", "IBM", "NFLX", "FB");
+    public static final String DIRECTORY = "file:///Users/Marcelo/development/personal/rx-legacy/src/test/java/resources";
     //TODO(Marcelo) show journey - both company and presentation
 
     @Test
@@ -55,7 +56,6 @@ public class MiamiMeetup {
     public void should_return_an_observable() {
 
     }
-t
 
     @Test
     public void should_return_all_items_added_by_ten_and_then_multiplied_by_2_and_only_get_the_even_then_add_them() {
@@ -127,12 +127,11 @@ t
     public void should_poll_for_changes_on_the_directory() throws Exception {
         final DefaultCamelContext camel = new DefaultCamelContext();
 
-        //Couchbase, MongoDB, RxNetty, RxAndroid
         final ReactiveCamel rxCamel = new ReactiveCamel(camel);
 
         //Not
         final rx.Observable<Message> msg = rxCamel
-                .toObservable("file:///Users/Marcelo/development/personal/rx-legacy/src/test/java/resources");
+                .toObservable(DIRECTORY);
 
         msg.subscribe(this::print);
 
